@@ -91,11 +91,31 @@ TEST(D_LinearSolve_test)
     x.print();
 }
 
-TEST(E_Regression_test)
+TEST(E_Regression_test_1)
 {
     float x_data[5] = {1, 2, 4, 5, 7};
     float y_data[5] = {4, 8, 10, 12, 18};
     Matrix<float> x(5,1,x_data), y(5,1,y_data);
+    Matrix<float> C = fit(x,y);
+    C.print();
+}
+
+TEST(E_Regression_test_2)
+{
+    float x_data[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    float y_data[11] = {20, 15, 16, 18, 23, 30, 40, 55, 70, 86, 110};
+    Matrix<float> x(11,1,x_data), y(11,1,y_data);
+    Matrix<float> C = fit(x,y,2);
+    C.print();
+}
+
+TEST(E_Regression_test_3)
+{
+    float x_data[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    float y_data[11] = {33, 20, 16, 18, 23, 33, 44, 55, 65, 70, 72};
+    Matrix<float> x(11,1,x_data), y(11,1,y_data);
+    Matrix<float> C = fit(x,y,3);
+    C.print();
 }
 
 TEST_MAIN()

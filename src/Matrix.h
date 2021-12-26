@@ -122,6 +122,7 @@ const Matrix<T> &Matrix<T>::operator=(const Matrix<T> &rhs)
     _row = rhs.row();
     _col = rhs.column();
     _size = rhs.size();
+    _square = rhs.is_square();
     data = new T[_size];
     for (int i = 0; i < row(); ++i)
     {
@@ -681,6 +682,32 @@ float norm(const Matrix<T> &v)
     return sqrt(n);
 }
 
+// REQUIRES: Matrix is a column vector
+// MODIFIES: N/A
+// EFFECTS:  Returns the norm of the vector;
+template <typename T>
+Matrix<T> pow(const Matrix<T> &A, const int &n)
+{
+    Matrix<T> m(A);
+    T temp;
+    for (int i = 0; i < A.row(); ++i)
+    {
+        for (int j = 0; j < A.column(); ++j)
+        {
+            if (n == 0) m(i,j) = 1;
+            else
+            {
+                temp = m(i,j);
+                for (int k = 0; k < n-1; ++k)
+                {
+                    m(i,j) *= temp;
+                }
+            }
+        }
+    }
+    return m;
+}
+
 // REQUIRES: U must be an upper triangular matrix. The number of rows in U must
 //           be equal to the number of rows in b.
 // MODIFIES: N/A
@@ -691,9 +718,15 @@ Matrix<T> backwardSub(const Matrix<T> &U, const Matrix<T> &b)
     Matrix<T> x(U.column(), b.column());
     int n = U.dim()-1;
     x(n, 0) = b.at(n, 0) / U.at(n, n);
+    T sum = 0;
     for (int i = n-1; i >= 0; --i)
     {
-        x(i,0) = (b.at(i,0) - U.at(i,i+1)*x.at(i+1, 0)) / U.at(i,i);
+        for (int j = n; j > i; --j)
+        {
+            sum += U.at(i,j)*x.at(j, 0);
+        }
+        x(i,0) = (b.at(i,0) - sum) / U.at(i,i);
+        sum = 0;
     }
     return x;
 }
@@ -706,10 +739,16 @@ template <typename T>
 Matrix<T> forwardSub(const Matrix<T> &L, const Matrix<T> &b)
 {
     Matrix<T> x(L.column(), b.column());
+    T sum = 0;
     x(0, 0) = b.at(0, 0) / L.at(0, 0);
     for (int i = 1; i < L.dim(); ++i)
     {
-        x(i,0) = (b.at(i,0) - L.at(i,i+1)*x.at(i-1, 0)) / L.at(i,i);
+        for (int j = 0; j < i; ++j)
+        {
+            sum += L.at(i,j)*x.at(j, 0);
+        }
+        x(i,0) = (b.at(i,0) - sum) / L.at(i,i);
+        sum = 0;
     }
     return x;
 }
@@ -724,6 +763,27 @@ Matrix<T> linearSolve(const Matrix<T> &A, const Matrix<T> &b)
     (A.trans()*A).QR(Q,R);
     x = backwardSub(R,Q.trans()*(A.trans()*b));
     return x;
+}
+
+// REQUIRES: Number of rows in x must be equal to the number of rows in y
+// MODIFIES: N/A
+// EFFECTS:  Returns coefficient matrix for specified polynomial fit.
+//           Example:
+//           n = 1: Returns solution to C1*x + C2 = y
+//           n = 2: Returns solution to C1*x^2 + C2*x + C3 = y
+//           n = m: Returns solution to C1*x^m + C2*x^(m-1) + ... + C(m+1) = y
+template <typename T>
+Matrix<T> fit(const Matrix<T> &x, const Matrix<T> &y, const int &n=1)
+{
+    Matrix<T> phi(x.row(),n+1), L(n+1), U(n+1);
+    for (int i = 0; i < n+1; ++i)
+    {
+        phi.set_col(i,pow(x,n-i));
+    }
+    (phi.trans()*phi).LU(L,U);
+    Matrix<T> y_star = forwardSub(L,phi.trans()*y);
+    Matrix<T> x_star = backwardSub(U, y_star);
+    return x_star;
 }
 
 // REQUIRES: order is a combination of X Y and Z. x, y, and z are in radians.
