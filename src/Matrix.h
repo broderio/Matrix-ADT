@@ -1,12 +1,12 @@
 //
-//  Matrix.hpp
+//  Matrix.h
 //  Matrix
 //
 //  Created by Broderick Riopelle on 12/22/21.
 //
 
-#ifndef Matrix_hpp
-#define Matrix_hpp
+#ifndef Matrix_h
+#define Matrix_h
 
 #include <stdio.h>
 #include <iostream>
@@ -746,4 +746,4 @@ Matrix<float> rotationMatrix(float x, float y, float z, std::string order)
                                      "combination of X Y Z");
 }
 
-#endif /* Matrix_hpp */
+#endif /* Matrix_h */

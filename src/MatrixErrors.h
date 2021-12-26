@@ -1,9 +1,12 @@
 //
-//  matrix_operators.cpp
+//  MatrixErrors.h
 //  Matrix
 //
 //  Created by Broderick Riopelle on 12/26/21.
 //
+
+#ifndef MatrixErrors_h
+#define MatrixErrors_h
 
 #include <stdio.h>
 #include <string>
@@ -88,3 +91,4 @@ std::string is_empty_error::what() const
     return msg;
 }
 
+#endif /* MatrixErrors_h */
