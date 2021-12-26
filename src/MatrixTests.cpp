@@ -6,10 +6,10 @@
 //
 
 #include <stdio.h>
-#include "Matrix.hpp"
+#include "Matrix.h"
 #include "unit_test_framework.h"
 
-TEST(init_test)
+TEST(A_init_test)
 {
     float data[9] = {31, 25, 13, 64, 53, 46, 97, 68, 19};
     Matrix<float> A(3,3,data);
@@ -50,7 +50,7 @@ TEST(init_test)
     ASSERT_EQUAL(E.column(), 3);
 }
 
-TEST(LU_test)
+TEST(B_LU_test)
 {
     float data[9] = {31, 25, 13, 64, 53, 46, 97, 68, 19};
     Matrix<float> A(3,data);
@@ -66,7 +66,7 @@ TEST(LU_test)
     A.print();
 }
 
-TEST(QR_test)
+TEST(C_QR_test)
 {
     float data[9] = {1,1,0,1,2,1,0,3,1};
     Matrix<float> A(3,data);
@@ -82,20 +82,20 @@ TEST(QR_test)
     A.print();
 }
 
-TEST(Regression_test)
-{
-    float x_data[5] = {1, 2, 4, 5, 7};
-    float y_data[5] = {4, 8, 10, 12, 18};
-    Matrix<float> x(5,1,x_data), y(5,1,y_data);
-}
-
-TEST(LinearSolve_test)
+TEST(D_LinearSolve_test)
 {
     float A_data[9] = {31, 25, 13, 64, 53, 46, 97, 68, 19};
     float b_data[3] = {1, 2, 3};
     Matrix<float> A(3,A_data), b(3,1,b_data), x;
     x = linearSolve(A,b);
     x.print();
+}
+
+TEST(E_Regression_test)
+{
+    float x_data[5] = {1, 2, 4, 5, 7};
+    float y_data[5] = {4, 8, 10, 12, 18};
+    Matrix<float> x(5,1,x_data), y(5,1,y_data);
 }
 
 TEST_MAIN()
