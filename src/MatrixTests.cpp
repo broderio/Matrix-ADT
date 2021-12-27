@@ -12,11 +12,11 @@
 TEST(A_init_test)
 {
     double data[9] = {31, 25, 13, 64, 53, 46, 97, 68, 19};
-    Matrix<double> A(3,3,data);
-    Matrix<double> B(3,data);
-    Matrix<double> C(A);
-    Matrix<double> D(3,3);
-    Matrix<double> E(3);
+    Matrix A(3,3,data);
+    Matrix B(3,data);
+    Matrix C(A);
+    Matrix D(3,3);
+    Matrix E(3);
     std::cout << "A: " << std::endl;
     A.print();
     std::cout << "B: " << std::endl;
@@ -53,8 +53,8 @@ TEST(A_init_test)
 TEST(B_LU_test)
 {
     double data[9] = {31, 25, 13, 64, 53, 46, 97, 68, 19};
-    Matrix<double> A(3,data);
-    Matrix<double> L(3),U(3);
+    Matrix A(3,data);
+    Matrix L(3),U(3);
     A.LU(L,U);
     std::cout << "L: " << std::endl;
     L.print();
@@ -69,8 +69,8 @@ TEST(B_LU_test)
 TEST(C_QR_test_1)
 {
     double data[9] = {1,1,0,1,2,1,0,3,1};
-    Matrix<double> A(3,data);
-    Matrix<double> Q(3),R(3);
+    Matrix A(3,data);
+    Matrix Q(3),R(3);
     A.QR(Q,R);
     std::cout << "Q: " << std::endl;
     (Q).print();
@@ -85,8 +85,8 @@ TEST(C_QR_test_1)
 TEST(C_QR_test_2)
 {
     double data[16] = {19,9,8,17,16,15,14,3,11,13,12,18,10,7,1,4};
-    Matrix<double> A(4,data);
-    Matrix<double> Q(4),R(4);
+    Matrix A(4,data);
+    Matrix Q(4),R(4);
     A.QR(Q,R);
     std::cout << "Q: " << std::endl;
     (Q).print();
@@ -104,7 +104,7 @@ TEST(D_LinearSolve_test)
 {
     double A_data[9] = {31, 25, 13, 64, 53, 46, 97, 68, 19};
     double b_data[3] = {1, 2, 3};
-    Matrix<double> A(3,A_data), b(3,1,b_data), x;
+    Matrix A(3,A_data), b(3,1,b_data), x;
     x = linearSolve(A,b);
     x.print();
 }
@@ -114,8 +114,8 @@ TEST(E_Regression_test_1)
     double ans[2] = {2.12280701754, 2.33333333333};
     double x_data[5] = {1, 2, 4, 5, 7};
     double y_data[5] = {4, 8, 10, 12, 18};
-    Matrix<double> x(5,1,x_data), y(5,1,y_data);
-    Matrix<double> C = fit(x,y);
+    Matrix x(5,1,x_data), y(5,1,y_data);
+    Matrix C = fit(x,y);
     C.print();
     for(int i = 0; i < 2; ++i) ASSERT_TRUE(is_approx(C.at(i), ans[i]));
 }
@@ -125,8 +125,8 @@ TEST(F_Regression_test_2)
     double ans[3] = {1.35780885781, -4.60536130536, 19.4125874126};
     double x_data[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     double y_data[11] = {20, 15, 16, 18, 23, 30, 40, 55, 70, 86, 110};
-    Matrix<double> x(11,1,x_data), y(11,1,y_data);
-    Matrix<double> C = fit(x,y,2);
+    Matrix x(11,1,x_data), y(11,1,y_data);
+    Matrix C = fit(x,y,2);
     C.print();
     for(int i = 0; i < 3; ++i) ASSERT_TRUE(is_approx(C.at(i), ans[i]));
 }
@@ -137,8 +137,8 @@ TEST(G_Regression_test_3)
                     32.9160839161};
     double x_data[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     double y_data[11] = {33, 20, 16, 18, 23, 33, 44, 55, 65, 70, 72};
-    Matrix<double> x(11,1,x_data), y(11,1,y_data);
-    Matrix<double> C = fit(x,y,3);
+    Matrix x(11,1,x_data), y(11,1,y_data);
+    Matrix C = fit(x,y,3);
     C.print();
     for(int i = 0; i < 3; ++i) ASSERT_TRUE(is_approx(C.at(i), ans[i]));
 }
