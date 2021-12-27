@@ -49,15 +49,16 @@ public:
     bool is_square() const;
     bool empty() const;
     int dim() const;
+    bool contains(const double &n) const;
     
     Matrix cof(const int &row, const int &col) const; // Cofactor Matrix
-    double det() const;                                       // Determinant
+    double det() const;                               // Determinant
     Matrix trans() const;                             // Transpose
     Matrix adj() const;                               // Adjugate
-    Matrix inv() const;                           // Inverse
+    Matrix inv() const;                               // Inverse
     
-    void LU(Matrix &L, Matrix &U) const;           // LU Decomposition
-    void QR(Matrix &L, Matrix &U) const;           // QR Decomposition
+    void LU(Matrix &L, Matrix &U) const;              // LU Decomposition
+    void QR(Matrix &L, Matrix &U) const;              // QR Decomposition
     
     double at(const int &row, const int &col = 0) const;
     void clear();
@@ -86,7 +87,7 @@ Matrix forwardSub(const Matrix &L, const Matrix &b);
 Matrix linearSolve(const Matrix &A, const Matrix &b, const std::string &type = "LU");
 Matrix fit(const Matrix &x, const Matrix &y, const int &n=1, const std::string &type = "LU");
 
-Matrix rotationMatrix(double x, double y, double z, std::string order);
+Matrix rotationMatrix(double x, double y, double z, std::string order="XYZ");
 
 Matrix zeros(const int &dim);
 Matrix zeros(const int &row, const int &col);

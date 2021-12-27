@@ -11,82 +11,82 @@
 #include <stdio.h>
 #include <string>
 
-class dimension_error {
+class dimension_mismatch {
 private:
     std::string msg;
 public:
-    dimension_error(std::string msg_in);
+    dimension_mismatch(std::string msg_in);
     std::string what() const;
 };
 
-class index_error {
+class invalid_index {
 private:
     std::string msg;
 public:
-    index_error(std::string msg_in);
+    invalid_index(std::string msg_in);
     std::string what() const;
 };
 
-class not_square_error {
+class rectangular_matrix {
 private:
     std::string msg;
 public:
-    not_square_error(std::string msg_in);
+    rectangular_matrix(std::string msg_in);
     std::string what() const;
 };
 
-class is_singular_error {
+class singular_matrix {
 private:
     std::string msg;
 public:
-    is_singular_error(std::string msg_in);
+    singular_matrix(std::string msg_in);
     std::string what() const;
 };
 
-class is_empty_error {
+class empty_matrix {
 private:
     std::string msg;
 public:
-    is_empty_error(std::string msg_in);
+    empty_matrix(std::string msg_in);
     std::string what() const;
 };
 
-dimension_error::dimension_error(std::string msg_in)
+dimension_mismatch::dimension_mismatch(std::string msg_in)
 : msg(msg_in) {}
 
-std::string dimension_error::what() const
+std::string dimension_mismatch::what() const
 {
     return msg;
 }
 
-index_error::index_error(std::string msg_in)
+invalid_index::invalid_index(std::string msg_in)
 : msg(msg_in) {}
 
-std::string index_error::what() const
+std::string invalid_index::what() const
 {
     return msg;
 }
 
-not_square_error::not_square_error(std::string msg_in)
+rectangular_matrix::rectangular_matrix(std::string msg_in)
 : msg(msg_in) {}
 
-std::string not_square_error::what() const
+std::string rectangular_matrix::what() const
 {
     return msg;
 }
 
-is_singular_error::is_singular_error(std::string msg_in)
+singular_matrix::singular_matrix(std::string msg_in)
 : msg(msg_in) {}
 
-std::string is_singular_error::what() const
+std::string singular_matrix::what() const
 {
     return msg;
 }
 
-is_empty_error::is_empty_error(std::string msg_in)
+empty_matrix::empty_matrix(std::string msg_in)
 : msg(msg_in) {}
 
-std::string is_empty_error::what() const
+std::string empty_matrix::what() const
 {
     return msg;
 }

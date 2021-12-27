@@ -111,7 +111,8 @@ TEST(D_LinearSolve_test)
 
 TEST(E_Regression_test_1)
 {
-    double ans[2] = {2.12280701754, 2.33333333333};
+    double ans[2] = {2.12280701754,
+                     2.33333333333};
     double x_data[5] = {1, 2, 4, 5, 7};
     double y_data[5] = {4, 8, 10, 12, 18};
     Matrix x(5,1,x_data), y(5,1,y_data);
@@ -122,7 +123,9 @@ TEST(E_Regression_test_1)
 
 TEST(F_Regression_test_2)
 {
-    double ans[3] = {1.35780885781, -4.60536130536, 19.4125874126};
+    double ans[3] = {1.35780885781,
+                    -4.60536130536,
+                     19.4125874126};
     double x_data[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     double y_data[11] = {20, 15, 16, 18, 23, 30, 40, 55, 70, 86, 110};
     Matrix x(11,1,x_data), y(11,1,y_data);
@@ -133,14 +136,32 @@ TEST(F_Regression_test_2)
 
 TEST(G_Regression_test_3)
 {
-    double ans[4] = {-0.262820512821, 4.71503496503, -16.9696969697,
-                    32.9160839161};
+    double ans[4] = {-0.262820512821,
+                      4.71503496503,
+                     -16.9696969697,
+                      32.9160839161};
     double x_data[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     double y_data[11] = {33, 20, 16, 18, 23, 33, 44, 55, 65, 70, 72};
     Matrix x(11,1,x_data), y(11,1,y_data);
     Matrix C = fit(x,y,3);
     C.print();
     for(int i = 0; i < 3; ++i) ASSERT_TRUE(is_approx(C.at(i), ans[i]));
+}
+
+TEST(H_Rotation_test)
+{
+    double ans[9] = {0.2919266, -0.4546487,  0.8414710,
+                     0.8372224, -0.3038967, -0.4546487,
+                     0.4624257,  0.8372224,  0.2919266};
+    Matrix R = rotationMatrix(1,1,1);
+    R.print();
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            ASSERT_TRUE(is_approx(R.at(i,j), ans[j + 3*i], 1e-6));
+        }
+    }
 }
 
 TEST_MAIN()
