@@ -18,11 +18,74 @@
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS: Returns true if a is within tolerance of b.
-template <typename T>
-bool Matrix<T>::float_equal(const float &a, const float &b) const
+bool is_approx(const double &a, const double &b, const double &tol)
 {
-    if (a-b <= EPSILON) return true;
-    return false;
+    if (a-b > tol) return false;
+    return true;
+}
+
+// REQUIRES: dim > 0
+// MODIFIES: N/A
+// EFFECTS:  Returns a dim by dim matrix full of zeros
+Matrix<double> zeros(const int &dim)
+{
+    Matrix<double> Z(dim);
+    for (int i = 0; i < dim; ++i)
+    {
+        for (int j = 0; j < dim; ++j)
+        {
+            Z(i,j) = 0;
+        }
+    }
+    return Z;
+}
+
+// REQUIRES: row > 0, col > 0
+// MODIFIES: N/A
+// EFFECTS:  Returns a row by col matrix full of zeros
+Matrix<double> zeros(const int &row, const int &col)
+{
+    Matrix<double> Z(row,col);
+    for (int i = 0; i < row; ++i)
+    {
+        for (int j = 0; j < col; ++j)
+        {
+            Z(i,j) = 0;
+        }
+    }
+    return Z;
+}
+
+// REQUIRES: dim > 0
+// MODIFIES: N/A
+// EFFECTS:  Returns a dim by dim matrix full of ones
+Matrix<double> ones(const int &dim)
+{
+    Matrix<double> Z(dim);
+    for (int i = 0; i < dim; ++i)
+    {
+        for (int j = 0; j < dim; ++j)
+        {
+            Z(i,j) = 1;
+        }
+    }
+    return Z;
+}
+
+// REQUIRES: row > 0, col > 0
+// MODIFIES: N/A
+// EFFECTS:  Returns a row by col matrix full of ones
+Matrix<double> ones(const int &row, const int &col)
+{
+    Matrix<double> Z(row,col);
+    for (int i = 0; i < row; ++i)
+    {
+        for (int j = 0; j < col; ++j)
+        {
+            Z(i,j) = 1;
+        }
+    }
+    return Z;
 }
 
 // Constructors
@@ -63,7 +126,7 @@ _empty(false)
 template <typename T>
 Matrix<T>::Matrix(const int &row_size, const int &col_size)
 : _row(row_size), _col(col_size), _size(row_size*col_size),
-data(new T[row_size*col_size]), _square(_row == _col), _empty(false)
+data(new T[row_size*col_size]), _square(_row == _col), _empty(_size == 0)
 {}
 
 // REQUIRES: arr must be of size row_size * col_size
@@ -77,7 +140,7 @@ data(new T[row_size*col_size]), _square(_row == _col), _empty(false)
 template <typename T>
 Matrix<T>::Matrix(const int &row_size, const int &col_size, const T *arr)
 : _row(row_size), _col(col_size), _size(row_size*col_size),
-  data(new T[row_size*col_size]), _square(_row == _col), _empty(false)
+  data(new T[row_size*col_size]), _square(_row == _col), _empty(_size == 0)
 {
       for (int i = 0; i < size(); ++i) data[i] = arr[i];
 }
@@ -90,8 +153,8 @@ Matrix<T>::Matrix(const int &row_size, const int &col_size, const T *arr)
 // EFFECTS:  N/A
 template <typename T>
 Matrix<T>::Matrix(const Matrix<T> &other)
-: _row(other.row()), _col(other.column()), _size(other.size()), _empty(other.empty()),
-  data(new T[other.size()]), _square(other.is_square())
+: _row(other.row()), _col(other.column()), _size(other.size()),
+_empty(other.empty()), data(new T[other.size()]), _square(other.is_square())
 {
     for (int i = 0; i < row(); ++i)
     {
@@ -363,7 +426,7 @@ T Matrix<T>::det() const
     if (!is_square()) throw not_square_error("Matrix is not square. Unable to "
                                              "to compute determinant.");
     Matrix<T> L,U;
-    float D = 1;
+    double D = 1;
     LU(L,U);
     for (int i = 0; i < dim(); ++i)
     {
@@ -412,13 +475,13 @@ Matrix<T> Matrix<T>::adj() const
 // MODIFIES: N/A
 // EFFECTS: Returns the inverse matrix of a given matrix;
 template <typename T>
-Matrix<float> Matrix<T>::inv() const
+Matrix<double> Matrix<T>::inv() const
 {
-    float D = det();
-    if (float_equal(D,0.0)) throw is_singular_error("Matrix is singular. Unable "
+    double D = det();
+    if (is_approx(D,0.0)) throw is_singular_error("Matrix is singular. Unable "
                                                 "to compute inverse.");
     Matrix<T> a = adj();
-    Matrix<float> I(_row);
+    Matrix<double> I(_row);
     for (int i = 0; i < _col; ++i)
     {
         for (int j = 0; j < _row; ++j)
@@ -440,14 +503,14 @@ void Matrix<T>::LU(Matrix<T> &L, Matrix<T> &U) const
     int n = dim();
     Matrix<T> C;
     Matrix<T> R;
-    float pivot;
+    double pivot;
     
     for (int k = 0; k < n; ++k)
     {
         C = temp.get_col(k);
         R = temp.get_row(k);
         pivot = C(k,0);
-        if (!float_equal(pivot,0)) {
+        if (!is_approx(pivot,0)) {
             C = C / pivot;
             temp = temp - C*R;
             L.set_col(k,C);
@@ -471,8 +534,8 @@ void Matrix<T>::LU(Matrix<T> &L, Matrix<T> &U) const
 template <typename T>
 void Matrix<T>::QR(Matrix<T> &Q, Matrix<T> &R) const
 {
-    float init[3] = {0, 0, 0};
-    Matrix<T> zeros(3,1,init), sum(zeros), u, q, v;
+    Matrix<double> Z = zeros(dim(),1);
+    Matrix<T> sum(Z), u, q, v;
     for (int k = 0; k < column(); ++k)
     {
         u = get_col(k);
@@ -482,7 +545,7 @@ void Matrix<T>::QR(Matrix<T> &Q, Matrix<T> &R) const
         }
         v = u - sum;
         Q.set_col(k, v / norm(v));
-        sum = zeros;
+        sum = Z;
     }
     R = Q.trans()*(*this);
 }
@@ -675,9 +738,9 @@ T dotProduct(const Matrix<T> &A, const Matrix<T> &B)
 // MODIFIES: N/A
 // EFFECTS:  Returns the norm of the vector;
 template <typename T>
-float norm(const Matrix<T> &v)
+double norm(const Matrix<T> &v)
 {
-    float n = 0;
+    double n = 0;
     for (int i = 0; i < v.size(); ++i) n += v.at(i,0)*v.at(i,0);
     return sqrt(n);
 }
@@ -757,45 +820,57 @@ Matrix<T> forwardSub(const Matrix<T> &L, const Matrix<T> &b)
 // MODIFIES: N/A
 // EFFECTS:  Returns solution to the linear equation Ax = b
 template <typename T>
-Matrix<T> linearSolve(const Matrix<T> &A, const Matrix<T> &b)
+Matrix<T> linearSolve(const Matrix<T> &A, const Matrix<T> &b,
+                      const std::string &type)
 {
-    Matrix<T> x(A.column(), b.row()), Q(A.dim()), R(A.dim());
-    (A.trans()*A).QR(Q,R);
-    x = backwardSub(R,Q.trans()*(A.trans()*b));
+    Matrix<T> x(A.column(), b.row());
+    if (type == "LU")
+    {
+        Matrix<T> L(A.dim()), U(A.dim());
+        A.LU(L,U);
+        Matrix<T> y_star = forwardSub(L,b);
+        x = backwardSub(U, y_star);
+    }
+    else if (type == "QR")
+    {
+        Matrix<T> Q(A.dim()), R(A.dim());
+        A.QR(Q,R);
+        x = backwardSub(R,Q.trans()*b);
+    }
     return x;
 }
 
 // REQUIRES: Number of rows in x must be equal to the number of rows in y
 // MODIFIES: N/A
 // EFFECTS:  Returns coefficient matrix for specified polynomial fit.
-//           Example:
-//           n = 1: Returns solution to C1*x + C2 = y
-//           n = 2: Returns solution to C1*x^2 + C2*x + C3 = y
-//           n = m: Returns solution to C1*x^m + C2*x^(m-1) + ... + C(m+1) = y
+// Example:
+//        n = 1: Returns coefficients for C1*x + C2 = y
+//        n = 2: Returns coefficients for C1*x^2 + C2*x + C3 = y
+//        n = m: Returns coefficients for C1*x^m + C2*x^(m-1) + ... + C(m+1) = y
 template <typename T>
-Matrix<T> fit(const Matrix<T> &x, const Matrix<T> &y, const int &n=1)
+Matrix<T> fit(const Matrix<T> &x, const Matrix<T> &y, const int &n,
+              const std::string &type)
 {
-    Matrix<T> phi(x.row(),n+1), L(n+1), U(n+1);
+    Matrix<T> phi(x.row(),n+1);
     for (int i = 0; i < n+1; ++i)
     {
         phi.set_col(i,pow(x,n-i));
     }
-    (phi.trans()*phi).LU(L,U);
-    Matrix<T> y_star = forwardSub(L,phi.trans()*y);
-    Matrix<T> x_star = backwardSub(U, y_star);
-    return x_star;
+    Matrix<T> A = phi.trans() * phi;
+    Matrix<T> b = phi.trans() * y;
+    return linearSolve(A,b,type);
 }
 
 // REQUIRES: order is a combination of X Y and Z. x, y, and z are in radians.
 // MODIFIES: N/A
 // EFFECTS:  Returns rotation matrix.
-Matrix<float> rotationMatrix(float x, float y, float z, std::string order)
+Matrix<double> rotationMatrix(double x, double y, double z, std::string order)
 {
-    float _x[9] = {1.0, 0.0, 0.0, 0.0, cos(x), -sin(x), 0.0, sin(x), cos(x)};
-    float _y[9] = {cos(y), 0.0, sin(y), 0.0, 1.0, 0.0, -sin(y), 0.0, cos(y)};
-    float _z[9] = {cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0};
+    double _x[9] = {1.0, 0.0, 0.0, 0.0, cos(x), -sin(x), 0.0, sin(x), cos(x)};
+    double _y[9] = {cos(y), 0.0, sin(y), 0.0, 1.0, 0.0, -sin(y), 0.0, cos(y)};
+    double _z[9] = {cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0};
     
-    Matrix<float> X(3,3,_x), Y(3,3,_y), Z(3,3,_z);
+    Matrix<double> X(3,3,_x), Y(3,3,_y), Z(3,3,_z);
     if (order == "XYZ") return X * Y * Z;
     else if (order == "XZY") return X * Z * Y;
     else if (order == "YXZ") return Y * X * Z;

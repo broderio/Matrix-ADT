@@ -8,6 +8,9 @@
 #ifndef MatrixClassDef_h
 #define MatrixClassDef_h
 
+const double EPSILON = 1e-10;
+bool is_approx(const double &a, const double &b, const double &tol = EPSILON);
+
 template <typename T>
 class Matrix {
 private:
@@ -17,8 +20,6 @@ private:
     bool _square;
     bool _empty;
     T* data; // dynamically allocated array with data
-    const float EPSILON = 1e-8;
-    bool float_equal(const float &a, const float &b) const;
 public:
     // Constructors
     Matrix();
@@ -54,12 +55,12 @@ public:
     T det() const;                                       // Determinant
     Matrix<T> trans() const;                             // Transpose
     Matrix<T> adj() const;                               // Adjugate
-    Matrix<float> inv() const;                           // Inverse
+    Matrix<double> inv() const;                           // Inverse
     
     void LU(Matrix<T> &L, Matrix<T> &U) const;           // LU Decomposition
     void QR(Matrix<T> &L, Matrix<T> &U) const;           // QR Decomposition
     
-    T at(const int &row, const int &col) const;
+    T at(const int &row, const int &col = 0) const;
     void clear();
     void resize(const int &row, const int &col);
     
@@ -75,5 +76,36 @@ public:
     
     void print(const int &n = 5) const;
 };
+
+template <typename T>
+T dotProduct(const Matrix<T> &A, const Matrix<T> &B);
+
+template <typename T>
+double norm(const Matrix<T> &v);
+
+template <typename T>
+Matrix<T> pow(const Matrix<T> &A, const int &n);
+
+template <typename T>
+Matrix<T> backwardSub(const Matrix<T> &U, const Matrix<T> &b);
+
+template <typename T>
+Matrix<T> forwardSub(const Matrix<T> &L, const Matrix<T> &b);
+
+template <typename T>
+Matrix<T> linearSolve(const Matrix<T> &A, const Matrix<T> &b, const std::string &type = "LU");
+
+template <typename T>
+Matrix<T> fit(const Matrix<T> &x, const Matrix<T> &y, const int &n=1, const std::string &type = "LU");
+
+Matrix<double> rotationMatrix(double x, double y, double z, std::string order);
+
+Matrix<double> zeros(const int &dim);
+
+Matrix<double> zeros(const int &row, const int &col);
+
+Matrix<double> ones(const int &dim);
+
+Matrix<double> ones(const int &row, const int &col);
 
 #endif /* MatrixClassDef_h */
