@@ -1,6 +1,6 @@
 # Matrix-ADT
 
-Matrix is a C++ library for linear algebra applications.
+Matrix is a C++ library for basic linear algebra applications. It is inspired by the way that the Julia package LinearAlgebra handles matrices, although this library is not nearly as optimized as the Julia package.
 
 ## Usage
 
