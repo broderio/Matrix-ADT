@@ -27,9 +27,9 @@ bool is_approx(const double &a, const double &b, const double &tol)
 // REQUIRES: dim > 0
 // MODIFIES: N/A
 // EFFECTS:  Returns a dim by dim matrix full of zeros
-Matrix zeros(const int &dim)
+matrix zeros(const int &dim)
 {
-    Matrix Z(dim);
+    matrix Z(dim);
     for (int i = 0; i < dim; ++i)
     {
         for (int j = 0; j < dim; ++j)
@@ -43,9 +43,9 @@ Matrix zeros(const int &dim)
 // REQUIRES: row > 0, col > 0
 // MODIFIES: N/A
 // EFFECTS:  Returns a row by col matrix full of zeros
-Matrix zeros(const int &row, const int &col)
+matrix zeros(const int &row, const int &col)
 {
-    Matrix Z(row,col);
+    matrix Z(row,col);
     for (int i = 0; i < row; ++i)
     {
         for (int j = 0; j < col; ++j)
@@ -59,9 +59,9 @@ Matrix zeros(const int &row, const int &col)
 // REQUIRES: dim > 0
 // MODIFIES: N/A
 // EFFECTS:  Returns a dim by dim matrix full of ones
-Matrix ones(const int &dim)
+matrix ones(const int &dim)
 {
-    Matrix Z(dim);
+    matrix Z(dim);
     for (int i = 0; i < dim; ++i)
     {
         for (int j = 0; j < dim; ++j)
@@ -75,9 +75,9 @@ Matrix ones(const int &dim)
 // REQUIRES: row > 0, col > 0
 // MODIFIES: N/A
 // EFFECTS:  Returns a row by col matrix full of ones
-Matrix ones(const int &row, const int &col)
+matrix ones(const int &row, const int &col)
 {
-    Matrix Z(row,col);
+    matrix Z(row,col);
     for (int i = 0; i < row; ++i)
     {
         for (int j = 0; j < col; ++j)
@@ -93,13 +93,13 @@ Matrix ones(const int &row, const int &col)
 // REQUIRES: N/A
 // MODIFIES: Initializes 0 by 0 empty matrix
 // EFFECTS: N/A
-Matrix::Matrix()
+matrix::matrix()
 : _row(0), _col(0), _size(0), data(nullptr), _square(false), _empty(true) {}
 
 // REQUIRES: N/A
 // MODIFIES: Initializes empty square matrix with dimension dim
 // EFFECTS: N/A
-Matrix::Matrix(const int &dim)
+matrix::matrix(const int &dim)
 : _row(dim), _col(dim), _size(dim*dim), data(new double[dim*dim]), _square(true),
 _empty(false) {}
 
@@ -107,10 +107,10 @@ _empty(false) {}
 // MODIFIES: Initializes square matrix with dimension dim and with data in arr.
 //           The data is assumed to be in order of a 2D matrix starting left to
 //           right and going downward.
-//           Example: Matrix(2, {1, 2, 3, 4}) would result in [ 1 2 ]
+//           Example: matrix(2, {1, 2, 3, 4}) would result in [ 1 2 ]
 //                                                            [ 3 4 ]
 // EFFECTS: N/A
-Matrix::Matrix(const int &dim, const double *arr)
+matrix::matrix(const int &dim, const double *arr)
 : _row(dim), _col(dim), _size(dim*dim), data(new double[dim*dim]), _square(true),
 _empty(false)
 {
@@ -120,7 +120,7 @@ _empty(false)
 // REQUIRES: N/A
 // MODIFIES: Initializes row_size by col_size empty matrix
 // EFFECTS: N/A
-Matrix::Matrix(const int &row_size, const int &col_size)
+matrix::matrix(const int &row_size, const int &col_size)
 : _row(row_size), _col(col_size), _size(row_size*col_size),
 data(new double[row_size*col_size]), _square(_row == _col), _empty(_size == 0)
 {}
@@ -129,11 +129,11 @@ data(new double[row_size*col_size]), _square(_row == _col), _empty(_size == 0)
 // MODIFIES: Initializes row_size by col_size matrix with data in arr. The data
 //           is assumed to be in order of a 2D matrix starting left to right and
 //           going downward.
-//           Example: Matrix(2, 4, {1, 2, 3, 4, 5, 6, 7, 8}) would result in
+//           Example: matrix(2, 4, {1, 2, 3, 4, 5, 6, 7, 8}) would result in
 //                    [ 1 2 3 4 ]
 //                    [ 5 6 7 8 ]
 // EFFECTS: N/A
-Matrix::Matrix(const int &row_size, const int &col_size, const double *arr)
+matrix::matrix(const int &row_size, const int &col_size, const double *arr)
 : _row(row_size), _col(col_size), _size(row_size*col_size),
   data(new double[row_size*col_size]), _square(_row == _col), _empty(_size == 0)
 {
@@ -146,7 +146,7 @@ Matrix::Matrix(const int &row_size, const int &col_size, const double *arr)
 // REQUIRES: N/A
 // MODIFIES: Creates a deep copy of other.
 // EFFECTS:  N/A
-Matrix::Matrix(const Matrix &other)
+matrix::matrix(const matrix &other)
 : _row(other.row()), _col(other.column()), _size(other.size()),
 _empty(other.empty()), data(new double[other.size()]), _square(other.is_square())
 {
@@ -162,7 +162,7 @@ _empty(other.empty()), data(new double[other.size()]), _square(other.is_square()
 // REQUIRES: N/A
 // MODIFIES: Deletes matrix.
 // EFFECTS:  N/A
-Matrix::~Matrix()
+matrix::~matrix()
 {
     clear();
 }
@@ -170,7 +170,7 @@ Matrix::~Matrix()
 // REQUIRES: N/A
 // MODIFIES: Deletes original matrix and creates a deep copy of rhs.
 // EFFECTS:  Returns the matrix after operation.
-const Matrix &Matrix::operator=(const Matrix &rhs)
+const matrix &matrix::operator=(const matrix &rhs)
 {
     if (this->data == rhs.data) return *this;
     clear();
@@ -197,7 +197,7 @@ const Matrix &Matrix::operator=(const Matrix &rhs)
 //           matrix. row and col are 0 indexed.
 // MODIFIES: N/A
 // EFFECTS:  Returns a reference to the object in the matrix.
-double &Matrix::operator()(const int &row, const int &col)
+double &matrix::operator()(const int &row, const int &col)
 {
     if (row < 0 || row > _row-1 || col < 0 || col > _col-1)
     {
@@ -211,14 +211,14 @@ double &Matrix::operator()(const int &row, const int &col)
 // REQUIRES: rhs is the same dimensions as lhs
 // MODIFIES: N/A
 // EFFECTS:  Returns the sum of two matrices
-Matrix Matrix::operator+(const Matrix &rhs) const
+matrix matrix::operator+(const matrix &rhs) const
 {
     if (rhs.column() != column() || rhs.row() != row())
     {
-        throw dimension_mismatch("Dimension mismatch. Matrix addition"
+        throw dimension_mismatch("Dimension mismatch. matrix addition"
                               "requires matrices of equal dimensions");
     }
-    Matrix m(*this);
+    matrix m(*this);
     for (int i = 0; i < row(); ++i)
     {
         for (int j = 0; j < column(); ++j)
@@ -232,9 +232,9 @@ Matrix Matrix::operator+(const Matrix &rhs) const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns the matrix summed with a scalar;
-Matrix Matrix::operator+(const double &a) const
+matrix matrix::operator+(const double &a) const
 {
-    Matrix m(*this);
+    matrix m(*this);
     for (int i = 0; i < row(); ++i)
     {
         for (int j = 0; j < column(); ++j)
@@ -248,14 +248,14 @@ Matrix Matrix::operator+(const double &a) const
 // REQUIRES: rhs is the same size and dimension as lhs
 // MODIFIES: N/A
 // EFFECTS:  Returns the difference of two matrices
-Matrix Matrix::operator-(const Matrix &rhs) const
+matrix matrix::operator-(const matrix &rhs) const
 {
     if (rhs.column() != column() || rhs.row() != row())
     {
-        throw dimension_mismatch("Dimensions mismatch. Matrix subtraction"
+        throw dimension_mismatch("Dimensions mismatch. matrix subtraction"
                               "requires matrices of equal dimensions");
     }
-    Matrix m(*this);
+    matrix m(*this);
     for (int i = 0; i < row(); ++i)
     {
         for (int j = 0; j < column(); ++j)
@@ -270,15 +270,15 @@ Matrix Matrix::operator-(const Matrix &rhs) const
 //           rhs
 // MODIFIES: N/A
 // EFFECTS:  Returns the dot product of two matrices
-Matrix Matrix::operator*(const Matrix &rhs) const
+matrix matrix::operator*(const matrix &rhs) const
 {
     if (rhs.row() != column())
     {
-        throw dimension_mismatch("Dimensions mismatch. Matrix multiplication "
+        throw dimension_mismatch("Dimensions mismatch. matrix multiplication "
                               "requires number of columns in first matrix "
                               "to equal number of rows in second matrix.");
     }
-    Matrix m(_row, rhs.column());
+    matrix m(_row, rhs.column());
     for (int i = 0; i < _row; ++i)
     {
         for (int j = 0; j < rhs.column(); ++j)
@@ -297,9 +297,9 @@ Matrix Matrix::operator*(const Matrix &rhs) const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns the matrix multiplied by a scalar;
-Matrix Matrix::operator*(const double &a) const
+matrix matrix::operator*(const double &a) const
 {
-    Matrix m(*this);
+    matrix m(*this);
     for (int i = 0; i < row(); ++i)
     {
         for (int j = 0; j < column(); ++j)
@@ -313,9 +313,9 @@ Matrix Matrix::operator*(const double &a) const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns the matrix divided by a scalar;
-Matrix Matrix::operator/(const double &a) const
+matrix matrix::operator/(const double &a) const
 {
-    Matrix m(*this);
+    matrix m(*this);
     for (int i = 0; i < row(); ++i)
     {
         for (int j = 0; j < column(); ++j)
@@ -331,7 +331,7 @@ Matrix Matrix::operator/(const double &a) const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns number of elements in matrix
-int Matrix::size() const
+int matrix::size() const
 {
     return _size;
 }
@@ -339,7 +339,7 @@ int Matrix::size() const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns number of rows in matrix
-int Matrix::row() const
+int matrix::row() const
 {
     return _row;
 }
@@ -347,7 +347,7 @@ int Matrix::row() const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns number of columns in matrix
-int Matrix::column() const
+int matrix::column() const
 {
     return _col;
 }
@@ -355,7 +355,7 @@ int Matrix::column() const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns true if matrix is square, false otherwise
-bool Matrix::is_square() const
+bool matrix::is_square() const
 {
     return _square;
 }
@@ -363,7 +363,7 @@ bool Matrix::is_square() const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns true if matrix is empty, false otherwise
-bool Matrix::empty() const
+bool matrix::empty() const
 {
     return _empty;
 }
@@ -371,7 +371,7 @@ bool Matrix::empty() const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns dimension if matrix is square, 0 otherwise
-int Matrix::dim() const
+int matrix::dim() const
 {
     if (_square) return _row;
     else return 0;
@@ -380,7 +380,7 @@ int Matrix::dim() const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns true if matrix contains n.
-bool Matrix::contains(const double &n) const
+bool matrix::contains(const double &n) const
 {
     for (int i = 0; i < row(); ++i)
     {
@@ -392,19 +392,19 @@ bool Matrix::contains(const double &n) const
     return false;
 }
 
-// REQUIRES: Matrix must be square. row must be greater than 0 and less than
+// REQUIRES: matrix must be square. row must be greater than 0 and less than
 //           the number of rows and col must be greater than 0 and less than
 //           the number of columns.
 // MODIFIES: N/A
 // EFFECTS:  Returns cofactor matrix of given index.
-Matrix Matrix::cof(const int &row, const int &col) const
+matrix matrix::cof(const int &row, const int &col) const
 {
     if (!is_square())
     {
-        throw rectangular_matrix("Matrix is not square. Unable to compute "
+        throw rectangular_matrix("matrix is not square. Unable to compute "
                                  "cofactor.");
     }
-    Matrix c(this->row()-1);
+    matrix c(this->row()-1);
     for (int i = 0; i < c.row(); ++i)
     {
         for (int j = 0; j < c.column(); ++j)
@@ -415,17 +415,17 @@ Matrix Matrix::cof(const int &row, const int &col) const
     return c;
 }
 
-// REQUIRES: Matrix must be square
+// REQUIRES: matrix must be square
 // MODIFIES: N/A
 // EFFECTS:  Returns determinant of matrix
-double Matrix::det() const
+double matrix::det() const
 {
     if (!is_square())
     {
-        throw rectangular_matrix("Matrix is not square. Unable to compute"
+        throw rectangular_matrix("matrix is not square. Unable to compute"
                                  "determinant.");
     }
-    Matrix L(dim()),U(dim());
+    matrix L(dim()),U(dim());
     double D = 1;
     LU(L,U);
     for (int i = 0; i < dim(); ++i)
@@ -438,9 +438,9 @@ double Matrix::det() const
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Returns the transpose of a matrix.
-Matrix Matrix::trans() const
+matrix matrix::trans() const
 {
-    Matrix t(column(), row());
+    matrix t(column(), row());
     for (int i = 0; i < row(); ++i)
     {
         for (int j = 0; j < column(); ++j)
@@ -451,12 +451,12 @@ Matrix Matrix::trans() const
     return t;
 }
 
-// REQUIRES: Matrix is square
+// REQUIRES: matrix is square
 // MODIFIES: N/A
 // EFFECTS:  Returns the adjunct matrix of a given matrix.
-Matrix Matrix::adj() const
+matrix matrix::adj() const
 {
-    Matrix A(dim());
+    matrix A(dim());
     double s;
     for (int i = 0; i < dim(); ++i)
     {
@@ -469,16 +469,16 @@ Matrix Matrix::adj() const
     return A;
 }
 
-// REQUIRES: Matrix is not singular
+// REQUIRES: matrix is not singular
 // MODIFIES: N/A
 // EFFECTS: Returns the inverse matrix of a given matrix;
-Matrix Matrix::inv() const
+matrix matrix::inv() const
 {
     double D = det();
-    if (is_approx(D,0.0)) throw singular_matrix("Matrix is singular. Unable "
+    if (is_approx(D,0.0)) throw singular_matrix("matrix is singular. Unable "
                                                 "to compute inverse.");
-    Matrix a = adj();
-    Matrix I(_row);
+    matrix a = adj();
+    matrix I(_row);
     for (int i = 0; i < _col; ++i)
     {
         for (int j = 0; j < _row; ++j)
@@ -495,11 +495,11 @@ Matrix Matrix::inv() const
 // EFFECTS:  N/A
 // NEED TO : Implement generalization for non-square matrices.
 //           Implement use of row permutations to catch errors.
-void Matrix::LU(Matrix &L, Matrix &U) const
+void matrix::LU(matrix &L, matrix &U) const
 {
     if (!L.is_square() || !U.is_square())
     {
-        throw rectangular_matrix("Matrix is not square. Unable to factor");
+        throw rectangular_matrix("matrix is not square. Unable to factor");
     }
     else if (L.dim() != dim() || U.dim() != dim())
     {
@@ -507,10 +507,10 @@ void Matrix::LU(Matrix &L, Matrix &U) const
                                  "dimensions. Unable to factor.");
     }
     
-    Matrix temp(*this);
+    matrix temp(*this);
     int n = dim();
-    Matrix C;
-    Matrix R;
+    matrix C;
+    matrix R;
     double pivot;
     
     for (int k = 0; k < n; ++k)
@@ -526,10 +526,10 @@ void Matrix::LU(Matrix &L, Matrix &U) const
         }
         else
         {
-            std::cout << "Matrix requires row permutations" << std::endl;
+            std::cout << "matrix requires row permutations" << std::endl;
             std::cout << "Step where algorithm failed is " << k << std::endl;
-            L = Matrix(n);
-            U = Matrix(n);
+            L = matrix(n);
+            U = matrix(n);
             break;
         }
     }
@@ -539,11 +539,11 @@ void Matrix::LU(Matrix &L, Matrix &U) const
 // MODIFIES: The orthonormal matrix is stored in Q and the upper triangular
 //           matrix is stored in U.
 // EFFECTS:  N/A
-void Matrix::QR(Matrix &Q, Matrix &R) const
+void matrix::QR(matrix &Q, matrix &R) const
 {
     if (!Q.is_square() || !R.is_square())
     {
-        throw rectangular_matrix("Matrix is not square. Unable to factor");
+        throw rectangular_matrix("matrix is not square. Unable to factor");
     }
     else if (Q.dim() != dim() || R.dim() != dim())
     {
@@ -551,8 +551,8 @@ void Matrix::QR(Matrix &Q, Matrix &R) const
                                  "dimensions. Unable to factor.");
     }
     
-    Matrix Z = zeros(dim(),1);
-    Matrix sum(Z), u, q, v;
+    matrix Z = zeros(dim(),1);
+    matrix sum(Z), u, q, v;
     for (int k = 0; k < column(); ++k)
     {
         u = get_col(k);
@@ -572,7 +572,7 @@ void Matrix::QR(Matrix &Q, Matrix &R) const
 //           than 0.
 // MODIFIES: N/A
 // EFFECTS:  Returns the value at the given index.
-double Matrix::at(const int &row, const int &col) const
+double matrix::at(const int &row, const int &col) const
 {
     if (row < 0 || row > _row-1 || col < 0 || col > _col-1)
     {
@@ -583,11 +583,11 @@ double Matrix::at(const int &row, const int &col) const
     return data[row*column() + col];
 }
 
-// REQUIRES: Matrix is not empty
+// REQUIRES: matrix is not empty
 // MODIFIES: Deletes dynamically allocated array storing matrix data and
 //           sets row, col, and size to 0.
 // EFFECTS:  N/A
-void Matrix::clear()
+void matrix::clear()
 {
     if (!empty()) delete[] data;
     _row = 0;
@@ -603,9 +603,9 @@ void Matrix::clear()
 //           initialized to 0 if row is greater than the number of rows or if
 //           col is greater than the number of columns.
 // EFFECTS:  N/A
-void Matrix::resize(const int &row, const int &col)
+void matrix::resize(const int &row, const int &col)
 {
-    Matrix m(row, col);
+    matrix m(row, col);
     for (int i = 0; i < row; ++i) {
         for (int j = 0; j < col; ++j) {
             if (i > _row-1 || j > _col-1) m(i,j) = 0;
@@ -631,7 +631,7 @@ void Matrix::resize(const int &row, const int &col)
 // REQUIRES: N/A
 // MODIFIES: N/A
 // EFFECTS:  Prints matrix to terminal.
-void Matrix::print(const int &n) const
+void matrix::print(const int &n) const
 {
     std::cout.precision(n);
     for (int i = 0; i < row(); ++i) {
@@ -647,9 +647,9 @@ void Matrix::print(const int &n) const
 // REQUIRES: n is greater than or equal to 0 and less than the number of rows
 // MODIFIES: N/A
 // EFFECTS: Returns the row at the given index
-Matrix Matrix::get_row(const int &n) const
+matrix matrix::get_row(const int &n) const
 {
-    Matrix r(1,column());
+    matrix r(1,column());
     for (int i = 0; i < row(); ++i) {
         r(0,i) = at(n,i);
     }
@@ -659,9 +659,9 @@ Matrix Matrix::get_row(const int &n) const
 // REQUIRES: n is greater than or equal to 0 and less than the number of columns
 // MODIFIES: N/A
 // EFFECTS: Returns the column at the given index
-Matrix Matrix::get_col(const int &n) const
+matrix matrix::get_col(const int &n) const
 {
-    Matrix c(row(),1);
+    matrix c(row(),1);
     for (int i = 0; i < row(); ++i) {
         c(i,0) = at(i,n);
     }
@@ -672,7 +672,7 @@ Matrix Matrix::get_col(const int &n) const
 //           r is a row vector
 // MODIFIES: Sets the values of the nth row to the values in r.
 // EFFECTS:  N/A
-void Matrix::set_row(const int &n, const Matrix &r)
+void matrix::set_row(const int &n, const matrix &r)
 {
     for (int i = 0; i < row(); ++i) {
         (*this)(n,i) = r.at(0,i);
@@ -683,7 +683,7 @@ void Matrix::set_row(const int &n, const Matrix &r)
 //           c is a column vector
 // MODIFIES: Sets the values of the nth column to the values in c.
 // EFFECTS:  N/A
-void Matrix::set_col(const int &n, const Matrix &c)
+void matrix::set_col(const int &n, const matrix &c)
 {
     for (int i = 0; i < row(); ++i) {
         (*this)(i,n) = c.at(i,0);
@@ -693,7 +693,7 @@ void Matrix::set_col(const int &n, const Matrix &c)
 // REQUIRES: Input matrix must be a row vector
 // MODIFIES: Adds row to matrix with given values
 // EFFECTS:  N/A
-void Matrix::push_row_back(const Matrix m)
+void matrix::push_row_back(const matrix m)
 {
     if (empty()) resize(_row+1, m.column());
     else resize(_row+1, _col);
@@ -703,7 +703,7 @@ void Matrix::push_row_back(const Matrix m)
 // REQUIRES: Input matrix must be a column vector
 // MODIFIES: Adds column to matrix with given values
 // EFFECTS:  N/A
-void Matrix::push_column_back(const Matrix m)
+void matrix::push_column_back(const matrix m)
 {
     if(empty()) resize(m.row(),_col+1);
     else resize(_row, _col+1);
@@ -713,7 +713,7 @@ void Matrix::push_column_back(const Matrix m)
 // REQUIRES: There must be at least 1 row in the matrix
 // MODIFIES: Deletes bottom row of matrix
 // EFFECTS:  N/A
-void Matrix::pop_row_back()
+void matrix::pop_row_back()
 {
     resize(_row-1, _col);
 }
@@ -721,7 +721,7 @@ void Matrix::pop_row_back()
 // REQUIRES: There must be at least 1 column in the matrix
 // MODIFIES: Deletes bottom column of matrix
 // EFFECTS:  N/A
-void Matrix::pop_column_back()
+void matrix::pop_column_back()
 {
     resize(_row, _col-1);
 }
@@ -731,29 +731,29 @@ void Matrix::pop_column_back()
 // REQUIRES: A and B are both column vectors of the same size
 // MODIFIES: N/A
 // EFFECTS:  Returns the dot product of A and B such that A•B=C
-double dotProduct(const Matrix &A, const Matrix &B)
+double dotProduct(const matrix &A, const matrix &B)
 {
     double C = 0;
     for (int i = 0; i < A.size(); ++i) C += A.at(i,0) * B.at(i,0);
     return C;
 }
 
-// REQUIRES: Matrix is a column vector
+// REQUIRES: matrix is a column vector
 // MODIFIES: N/A
 // EFFECTS:  Returns the norm of the vector;
-double norm(const Matrix &v)
+double norm(const matrix &v)
 {
     double n = 0;
     for (int i = 0; i < v.size(); ++i) n += v.at(i,0)*v.at(i,0);
     return sqrt(n);
 }
 
-// REQUIRES: Matrix is a column vector
+// REQUIRES: matrix is a column vector
 // MODIFIES: N/A
 // EFFECTS:  Returns the norm of the vector;
-Matrix pow(const Matrix &A, const int &n)
+matrix pow(const matrix &A, const int &n)
 {
-    Matrix m(A);
+    matrix m(A);
     double temp;
     for (int i = 0; i < A.row(); ++i)
     {
@@ -777,9 +777,9 @@ Matrix pow(const Matrix &A, const int &n)
 //           be equal to the number of rows in b.
 // MODIFIES: N/A
 // EFFECTS:  Returns solution to Ux = b;
-Matrix backwardSub(const Matrix &U, const Matrix &b)
+matrix backwardSub(const matrix &U, const matrix &b)
 {
-    Matrix x(U.column(), b.column());
+    matrix x(U.column(), b.column());
     int n = U.dim()-1;
     x(n, 0) = b.at(n, 0) / U.at(n, n);
     double sum = 0;
@@ -799,9 +799,9 @@ Matrix backwardSub(const Matrix &U, const Matrix &b)
 //           be equal to the number of rows in b.
 // MODIFIES: N/A
 // EFFECTS:  Returns solution to Lx = b;
-Matrix forwardSub(const Matrix &L, const Matrix &b)
+matrix forwardSub(const matrix &L, const matrix &b)
 {
-    Matrix x(L.column(), b.column());
+    matrix x(L.column(), b.column());
     double sum = 0;
     x(0, 0) = b.at(0, 0) / L.at(0, 0);
     for (int i = 1; i < L.dim(); ++i)
@@ -819,29 +819,29 @@ Matrix forwardSub(const Matrix &L, const Matrix &b)
 // REQUIRES: Number of rows in A must be equal to the number of rows in b
 // MODIFIES: N/A
 // EFFECTS:  Returns solution to the linear equation Ax = b
-Matrix linearSolve(const Matrix &A, const Matrix &b,
+matrix linearSolve(const matrix &A, const matrix &b,
                       const std::string &type)
 {
     double D = A.det();
     if (is_approx(D,0.0))
     {
-        throw singular_matrix("Matrix is singular. Unable to solve.");
+        throw singular_matrix("matrix is singular. Unable to solve.");
     }
     else if (A.row() != b.row())
     {
         throw std::invalid_argument("Rows in A != rows in b");
     }
-    Matrix x(A.column(), b.row());
+    matrix x(A.column(), b.row());
     if (type == "LU")
     {
-        Matrix L(A.dim()), U(A.dim());
+        matrix L(A.dim()), U(A.dim());
         A.LU(L,U);
-        Matrix y_star = forwardSub(L,b);
+        matrix y_star = forwardSub(L,b);
         x = backwardSub(U, y_star);
     }
     else if (type == "QR")
     {
-        Matrix Q(A.dim()), R(A.dim());
+        matrix Q(A.dim()), R(A.dim());
         A.QR(Q,R);
         x = backwardSub(R,Q.trans()*b);
     }
@@ -855,29 +855,29 @@ Matrix linearSolve(const Matrix &A, const Matrix &b,
 //        n = 1: Returns coefficients for C1*x + C2 = y
 //        n = 2: Returns coefficients for C1*x^2 + C2*x + C3 = y
 //        n = m: Returns coefficients for C1*x^m + C2*x^(m-1) + ... + C(m+1) = y
-Matrix fit(const Matrix &x, const Matrix &y, const int &n,
+matrix fit(const matrix &x, const matrix &y, const int &n,
               const std::string &type)
 {
-    Matrix phi(x.row(),n+1);
+    matrix phi(x.row(),n+1);
     for (int i = 0; i < n+1; ++i)
     {
         phi.set_col(i,pow(x,n-i));
     }
-    Matrix A = phi.trans() * phi;
-    Matrix b = phi.trans() * y;
+    matrix A = phi.trans() * phi;
+    matrix b = phi.trans() * y;
     return linearSolve(A,b,type);
 }
 
 // REQUIRES: order is a combination of X Y and Z. x, y, and z are in radians.
 // MODIFIES: N/A
 // EFFECTS:  Returns rotation matrix.
-Matrix rotationMatrix(double x, double y, double z, std::string order)
+matrix rotationmatrix(double x, double y, double z, std::string order)
 {
     double _x[9] = {1.0, 0.0, 0.0, 0.0, cos(x), -sin(x), 0.0, sin(x), cos(x)};
     double _y[9] = {cos(y), 0.0, sin(y), 0.0, 1.0, 0.0, -sin(y), 0.0, cos(y)};
     double _z[9] = {cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0};
     
-    Matrix X(3,3,_x), Y(3,3,_y), Z(3,3,_z);
+    matrix X(3,3,_x), Y(3,3,_y), Z(3,3,_z);
     if (order == "XYZ") return (X * Y) * Z;
     else if (order == "XZY") return (X * Z) * Y;
     else if (order == "YXZ") return (Y * X) * Z;

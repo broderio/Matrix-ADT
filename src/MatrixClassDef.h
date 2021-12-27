@@ -11,35 +11,36 @@
 const double EPSILON = 1e-10;
 bool is_approx(const double &a, const double &b, const double &tol = EPSILON);
 
-class Matrix {
+class matrix {
 private:
-    int _row; // number of rows
-    int _col; // number of columns
-    int _size; // number of elements in matrix
-    bool _square;
-    bool _empty;
-    double* data; // dynamically allocated array with data
+    int _row;       // number of rows
+    int _col;       // number of columns
+    int _size;      // number of elements in matrix
+    bool _square;   // boolean for square matrix
+    bool _empty;    // boolean for empty matrix
+    double* data;   // dynamically allocated array with data
 public:
     // Constructors
-    Matrix();
-    Matrix(const int &dim);
-    Matrix(const int &dim, const double *arr);
-    Matrix(const int &row_size, const int &col_size);
-    Matrix(const int &row_size, const int &col_size, const double *arr);
+    matrix();
+    matrix(const int &dim);
+    matrix(const int &dim, const double *arr);
+    matrix(const int &row_size, const int &col_size);
+    matrix(const int &row_size, const int &col_size, const double *arr);
     
     // Big Three
-    Matrix(const Matrix &other);
-    ~Matrix();
-    const Matrix& operator=(const Matrix &rhs);
+    matrix(const matrix &other);
+    ~matrix();
+    const matrix& operator=(const matrix &rhs);
     
-    // Overloaded Operator
-    double &operator()(const int &row, const int &col);
-    Matrix operator+(const Matrix &rhs) const;
-    Matrix operator+(const double &a) const;
-    Matrix operator-(const Matrix &rhs) const;
-    Matrix operator*(const Matrix &rhs) const;
-    Matrix operator*(const double &a) const;
-    Matrix operator/(const double &a) const;
+    // Overloaded Operators
+    double &operator()(const int &row, const int &col); // Element Access
+    matrix operator+(const matrix &rhs) const;          // matrix Addition
+    matrix operator+(const double &a) const;            // Scalar Addition
+    matrix operator-(const matrix &rhs) const;          // matrix Subtraction
+    matrix operator-(const double &a) const;            // Scalar Subtraction
+    matrix operator*(const matrix &rhs) const;          // matrix Multiplication
+    matrix operator*(const double &a) const;            // Scalar Multiplication
+    matrix operator/(const double &a) const;            // Scalar Division
     
     // Functions
     int size() const;
@@ -51,47 +52,49 @@ public:
     int dim() const;
     bool contains(const double &n) const;
     
-    Matrix cof(const int &row, const int &col) const; // Cofactor Matrix
+    matrix cof(const int &row, const int &col) const; // Cofactor matrix
     double det() const;                               // Determinant
-    Matrix trans() const;                             // Transpose
-    Matrix adj() const;                               // Adjugate
-    Matrix inv() const;                               // Inverse
+    matrix trans() const;                             // Transpose
+    matrix adj() const;                               // Adjugate
+    matrix inv() const;                               // Inverse
     
-    void LU(Matrix &L, Matrix &U) const;              // LU Decomposition
-    void QR(Matrix &L, Matrix &U) const;              // QR Decomposition
+    void LU(matrix &L, matrix &U) const;              // LU Decomposition
+    void QR(matrix &L, matrix &U) const;              // QR Decomposition
     
     double at(const int &row, const int &col = 0) const;
     void clear();
     void resize(const int &row, const int &col);
     
-    Matrix get_row(const int &n) const;
-    Matrix get_col(const int &n) const;
-    void set_row(const int &n, const Matrix &r);
-    void set_col(const int &n, const Matrix &c);
+    matrix get_row(const int &n) const;
+    matrix get_col(const int &n) const;
+    void set_row(const int &n, const matrix &r);
+    void set_col(const int &n, const matrix &c);
     
-    void push_row_back(const Matrix m);
-    void push_column_back(const Matrix m);
+    void push_row_back(const matrix m);
+    void push_column_back(const matrix m);
     void pop_row_back();
     void pop_column_back();
     
     void print(const int &n = 5) const;
 };
 
-double dotProduct(const Matrix &A, const Matrix &B);
-double norm(const Matrix &v);
-Matrix pow(const Matrix &A, const int &n);
+double dotProduct(const matrix &A, const matrix &B);
+double norm(const matrix &v);
+matrix pow(const matrix &A, const int &n);
 
-Matrix backwardSub(const Matrix &U, const Matrix &b);
-Matrix forwardSub(const Matrix &L, const Matrix &b);
+matrix backwardSub(const matrix &U, const matrix &b);
+matrix forwardSub(const matrix &L, const matrix &b);
 
-Matrix linearSolve(const Matrix &A, const Matrix &b, const std::string &type = "LU");
-Matrix fit(const Matrix &x, const Matrix &y, const int &n=1, const std::string &type = "LU");
+matrix linearSolve(const matrix &A, const matrix &b,
+                   const std::string &type = "LU");
+matrix fit(const matrix &x, const matrix &y, const int &n=1,
+           const std::string &type = "LU");
 
-Matrix rotationMatrix(double x, double y, double z, std::string order="XYZ");
+matrix rotationmatrix(double x, double y, double z, std::string order="XYZ");
 
-Matrix zeros(const int &dim);
-Matrix zeros(const int &row, const int &col);
-Matrix ones(const int &dim);
-Matrix ones(const int &row, const int &col);
+matrix zeros(const int &dim);
+matrix zeros(const int &row, const int &col);
+matrix ones(const int &dim);
+matrix ones(const int &row, const int &col);
 
-#endif /* MatrixClassDef_h */
+#endif /*MatrixClassDef_h */
